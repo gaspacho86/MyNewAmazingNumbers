@@ -1,0 +1,50 @@
+import java.util.*;
+
+class DisplayingMessages extends Main {
+    public static void printInstructions() {
+        System.out.println("""
+                Supported requests:
+                - enter a natural number to know its properties;
+                - enter two natural numbers to obtain the properties of the list:
+                  * the first parameter represents a starting number;
+                  * the second parameter shows how many consecutive numbers are to be processed;
+                - two natural numbers and properties to search for;
+                - a property preceded by minus must not be present in numbers;
+                - separate the parameters with one space;
+                - enter 0 to exit.""");
+    }
+
+    static void printProperties(long number, int lengthList) {
+        if (lengthList == 0) {
+            System.out.printf("Properties of %,d\n", number);
+            for (Properties p: Properties.values()) {
+                System.out.printf("%12s: %b%n", p.name().toLowerCase(), getAllPropertiesValue(number)[p.ordinal()]);
+            }
+        } else {
+            StringBuilder propertiesToString = new StringBuilder();
+            for (Properties p: Properties.values()) {
+                propertiesToString.append(getAllPropertiesValue(number)[p.ordinal()] ? p.name().toLowerCase() + ", " : "");
+            }
+            System.out.printf("%,16d is %s%n", number, propertiesToString.substring(0, propertiesToString.length() - 2));
+        }
+    }
+
+    static void printErrorInvalidProperties() {
+        if (String.valueOf(invalidProp).split(", ").length < 2) {
+                System.out.printf("The property [%s] is wrong.\nAvailable PROPERTIES: %s\n",
+                        invalidProp.substring(0, invalidProp.length() - 2), Arrays.toString(Properties.values()));
+        } else {
+            System.out.printf("The PROPERTIES [%s] are wrong.\nAvailable PROPERTIES: %s\n",
+                    invalidProp.substring(0, invalidProp.length() - 2), Arrays.toString(Properties.values()));
+        }
+        invalidProp = new StringBuilder();
+    }
+
+    static void printErrorMutuallyExclusiveNumbers(String[] inputData, Properties[] enterProperties) {
+        System.out.printf("""
+                        The request contains mutually exclusive PROPERTIES: %s
+                        There are no numbers with these PROPERTIES.
+                        """,
+                getMutuallyExclusiveNumbers(inputData, enterProperties));
+    }
+}
