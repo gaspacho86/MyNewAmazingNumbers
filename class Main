@@ -1,0 +1,29 @@
+public class Main extends DataProcessing {
+
+    static boolean exit = false;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to Amazing Numbers!" + "\n");
+        DisplayingMessages.printInstructions();
+
+        while (!exit) {
+            System.out.print("\n" + "Enter a request: ");
+
+            String stringInput = scanner.nextLine().trim().toUpperCase();
+            String[] inputData = stringInput.split("\\s+");
+
+            long number = getNumeric(inputData[0]);
+            int lengthList = (int) getNumeric(inputData.length > 1 ? inputData[1] : "0");
+
+            Properties[] enterProperties = new Properties[inputData.length < 2 ? 0 : inputData.length - 2];
+
+            for (int i = 0; i < enterProperties.length; i++) {
+                enterProperties[i] = getValidProperty(inputData[i + 2]);}
+
+            UserInteraction.displayResults(inputData, number, lengthList, enterProperties);
+        }
+        scanner.close();
+    }
+}
