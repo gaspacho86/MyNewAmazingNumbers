@@ -1,0 +1,30 @@
+import java.util.Arrays;
+
+class UserInteraction extends DisplayingMessages {
+
+    public static void displayResults(String[] inputData, long number, int lengthList, Properties[] enterProperties) {
+
+        System.out.println();
+        if (number == 0) {
+            System.out.println("Goodbye!");
+            exit = true;
+        } else if (inputData[0].isEmpty()) {
+            printInstructions();
+        } else if (number < 0) {
+            System.out.println("The first parameter should be a natural number or zero.");
+        } else if (lengthList < 0) {
+            System.out.println("The second parameter should be a natural number.");
+        } else if (Arrays.toString(enterProperties).contains("null")) {
+            printErrorInvalidProperties();
+        } else if (!getMutuallyExclusiveNumbers(inputData, enterProperties).isEmpty()) {
+            printErrorMutuallyExclusiveNumbers(inputData, enterProperties);
+        } else if (enterProperties.length != 0) {
+            long[] numbersByProperties = getNumbersWithGivenProperties(inputData, number, lengthList, enterProperties);
+            for (long num : numbersByProperties) printProperties(num, lengthList);
+        } else if (lengthList > 0) {
+            for (long i = number; i < number + lengthList; i++) printProperties(i, lengthList);
+        } else {
+            printProperties(number, lengthList);
+        }
+    }
+}
