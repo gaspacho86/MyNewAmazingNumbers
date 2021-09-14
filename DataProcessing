@@ -1,0 +1,62 @@
+class DataProcessing extends NumberProperties {
+    static StringBuilder invalidProp = new StringBuilder();
+
+    static long getNumeric(String input) {
+        try {
+            return Long.parseLong(input);
+        } catch (Exception e) {
+            return  -1;
+        }
+    }
+
+    static Properties getValidProperty(String input) {
+        Properties property;
+        try {
+            if (input.startsWith("-") && input.length() > 1) {
+                property = Properties.valueOf(input.substring(1));
+                property.changeValue();
+            } else {
+                property = Properties.valueOf(input);
+            }
+            return property;
+        } catch (Exception e) {
+            invalidProp.append(input).append(", ");
+            return null;
+        }
+    }
+
+    static long[] getNumbersWithGivenProperties(String[] inputData, long number, int lengthList, Properties[] enterProperties) {
+        long[] numbers = new long[lengthList];
+        for (int i = 0; i < lengthList;) {
+            boolean checkProperty = true;
+            for (int j = 0; j < enterProperties.length; j++) {
+                if (inputData[j + 2].contains("-") == getAllPropertiesValue(number)[enterProperties[j].ordinal()]) {
+                    checkProperty = false;
+                    break;
+                }
+            }
+            if (checkProperty) {
+                numbers[i] = number;
+                i++;
+            }
+            number++;
+        }
+        return numbers;
+    }
+
+    static StringBuilder getMutuallyExclusiveNumbers(String[] inputData, Properties[] enterProperties) {
+        StringBuilder MutuallyExclusiveNumbers = new StringBuilder();
+
+        for (int i = 0; i < enterProperties.length; i++) {
+            for (int j = 1 + i; j < enterProperties.length; j++) {
+                if (enterProperties[i].code == enterProperties[j].code && !inputData[i + 2].equals(inputData[j + 2])) {
+                    MutuallyExclusiveNumbers
+                            .append("[").append(inputData[i + 2])
+                            .append(", ").append(inputData[j + 2]).append("]");
+                }
+            }
+        }
+        for (Properties p : enterProperties) p.changeValue();
+        return MutuallyExclusiveNumbers;
+    }
+}
