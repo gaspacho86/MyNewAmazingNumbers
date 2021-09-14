@@ -1,0 +1,93 @@
+class NumberProperties {
+    enum Properties {
+        EVEN(1), ODD(1),
+        DUCK(2), SPY(2),
+        SQUARE(3), SUNNY(3),
+        HAPPY(4), SAD(4),
+        BUZZ(5), PALINDROMIC(6),
+        GAPFUL(7), JUMPING(8);
+
+        int code;
+
+        Properties(int code) {
+            this.code = code;
+        }
+
+        public void  changeValue() {
+            this.code -= this.code + this.code;
+        }
+    }
+
+    static boolean[] getAllPropertiesValue(long number) {
+        return new boolean[]{
+                isEven(number), !isEven(number),
+                isDuck(number), isSpy(number),
+                isSquare(number), isSunny(number),
+                isHappy(number), !isHappy(number),
+                isBuzz(number), isPalindrome(number),
+                isGapful(number), isJumping(number)};
+    }
+
+    static boolean isSpy(long number) {
+        String[] str = String.valueOf(number).split("");
+        int nSum = 0;
+        int nProd = 1;
+        for (String s : str) {
+            nSum += Integer.parseInt(s);
+            nProd *= Integer.parseInt(s);
+        }
+        return nSum == nProd;
+    }
+
+    static  boolean isHappy(long number) {
+        while (true) {
+            long sum = 0;
+            for (long i = 1; true; i *= 10) {
+                sum += Math.pow((number % (10L * i)) / i, 2);
+                if (i == Math.pow(10 , String.valueOf(number).length() - 1)) break;
+            }
+            number = sum;
+            if (String.valueOf(sum).length() == 1) return sum == 1;
+        }
+    }
+
+    static boolean isJumping(long number) {
+        String[] str = String.valueOf(number).split("");
+        for (int i = 0; i < str.length - 1; i++) {
+            if (Math.abs(Long.parseLong(str[i]) - Long.parseLong(str[i + 1])) != 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static boolean isPalindrome(long number) {
+        StringBuilder sb = new StringBuilder(String.valueOf(number));
+        return sb.substring(0, sb.length() / 2).equals(sb.reverse().substring(0, sb.length() / 2));
+    }
+
+    static boolean isGapful(long number) {
+        String[] str = String.valueOf(number).split("");
+        return number / 100 > 0 && number % Integer.parseInt(str[0] + str[str.length - 1]) == 0;
+    }
+
+    static boolean isEven(long number) {
+        return (number % 2 == 0);
+    }
+
+    static boolean isBuzz(long number) {
+        return (number % 7 == 0 || number % 10 == 7);
+    }
+
+    static boolean isDuck(long number) {
+        return String.valueOf(number).substring(1).contains("0");
+    }
+
+    static boolean isSquare(long number) {
+        return number % Math.sqrt(number) == 0;
+    }
+
+    static boolean isSunny(long number) {
+        return (number + 1) % Math.sqrt(number + 1) == 0;
+    }
+}
